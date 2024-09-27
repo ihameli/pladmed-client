@@ -184,15 +184,21 @@ class OperationsManager():
 
         if is_over(operation):
             print("Operation has to stop due to finish date")
-            self.remove_cron_task(operation)
-            self.communicator.finish_operation(operation)
+            self.cancel_operation(operation)
             return
 
         print("Jobs all set")
 
     def remove_cron_task(self, operation):
+        print(f"Removing crontab jobs with op_id: ${operation.id}")
         with CronTab(user=True) as cron:
             job_iter = cron.find_comment(operation.id)
 
             for job in job_iter:
+                print(f"Found a contab job to delete ${job}")
                 cron.remove(job)
+
+    def cancel_operation(self, operation):
+        self.remove_cron_task(operation)
+        self.communicator.finish_operation(operation)
+

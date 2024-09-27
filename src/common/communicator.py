@@ -27,6 +27,7 @@ class Communicator:
         ])
 
     def finish_operation(self, operation):
+        print(f"Finishing operation with id: ${operation.id}")
         self.operations_queue.put([
             NEW_DATA,
             FINISHED,
